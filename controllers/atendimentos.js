@@ -5,7 +5,7 @@ module.exports = app => {
 
     app.post('/atendimentos', (req, res) => {
         const atendimento = req.body
-        Atendimento.adicionar(atendimento)
-        res.send('Página Atendimentos [POST]')
+        //Método utilizado no curso, porém é melhor retornar o resultado e o controller enviar a resposta (TODO)
+        Atendimento.adicionar(atendimento, res)
     })
 }
