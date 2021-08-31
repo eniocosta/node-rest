@@ -1,5 +1,6 @@
 const conexao = require('../infra/conexao')
 const moment = require('moment')
+const axios = require('axios')
 class Atendimento {
     listar(res) {
         //Método utilizado no curso, porém é melhor utilizar ORM (TODO)
@@ -18,12 +19,19 @@ class Atendimento {
         //Método utilizado no curso, porém é melhor utilizar ORM (TODO)
         const sql = `SELECT * FROM atendimentos WHERE id = ${id}`
         
-        conexao.query(sql, (erro, resultados) => {
+        conexao.query(sql, async (erro, resultados) => {
             if(erro) {
                 res.status(400).json(erro)
             } else {
                 const atendimento   = resultados[0]
-                const httpStatus    = atendimento ? 200 : 404 
+                const httpStatus    = atendimento ? 200 : 404
+                
+                if(atendimento){
+                    const cpf = atendimento.cliente
+                    const { data } = await axios.get(`http://localhost:8082/${cpf}`)
+                    atendimento.cliente = data
+                } 
+                
                 res.status(httpStatus).json(atendimento)
             }
         })
