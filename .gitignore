@@ -103,4 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-servicos/node_modules/
+simple-api-rest/node_modules/
+simple-api-rest/servicos/node_modules/
