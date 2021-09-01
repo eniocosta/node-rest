@@ -2,7 +2,6 @@ const Atendimento = require('../models/atendimentos')
 
 module.exports = app => {
     app.get('/atendimentos', (req, res) => {
-        //Método utilizado no curso, porém é melhor retornar o resultado e o controller enviar a resposta (TODO)
         Atendimento.listar(res)
     })
 
@@ -13,7 +12,9 @@ module.exports = app => {
 
     app.post('/atendimentos', (req, res) => {
         const atendimento = req.body
-        Atendimento.adicionar(atendimento, res)
+        Atendimento.adicionar(atendimento)
+            .then(resultado => res.status(201).json(resultado))
+            .catch(erro => res.status(400).json(erro))
     })
 
     app.patch('/atendimentos/:id', (req, res) => {
