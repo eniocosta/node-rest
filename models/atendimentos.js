@@ -35,26 +35,18 @@ class Atendimento {
         return AtendimentoRepositorio.listar()
     }
 
-    exibir(id, res) {
-        //Método utilizado no curso, porém é melhor utilizar ORM (TODO)
-        const sql = `SELECT * FROM atendimentos WHERE id = ${id}`
-        
-        conexao.query(sql, async (erro, resultados) => {
-            if(erro) {
-                res.status(400).json(erro)
-            } else {
-                const atendimento   = resultados[0]
-                const httpStatus    = atendimento ? 200 : 404
-                
-                if(atendimento){
-                    const cpf = atendimento.cliente
-                    const { data } = await axios.get(`http://localhost:8082/${cpf}`)
-                    atendimento.cliente = data
-                } 
-                
-                res.status(httpStatus).json(atendimento)
-            }
-        })
+    exibir(id) {
+        return AtendimentoRepositorio.buscar(id)
+                .then(async resultado => {
+                    const atendimento = resultado[0]
+                    if(atendimento){
+                        const cpf = atendimento.cliente
+                        const { data } = await axios.get(`http://localhost:8082/${cpf}`)
+                        atendimento.cliente = data
+                    }
+                    return atendimento
+                })
+
     }
 
     adicionar(atendimento) {
@@ -79,30 +71,26 @@ class Atendimento {
         }
     }
 
-    alterar(id, valores, res) {
+    alterar(id, valores) {
         if(valores.data){
             valores.data = moment(valores.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:ss')
         }
 
-        const sql = `UPDATE atendimentos SET ? WHERE id=?`
-        conexao.query(sql, [valores, id], (erro, resultado) => {
-            if(erro) {
-                res.status(400).json(erro)
-            } else {
-                res.status(200).json({id, ...valores})
-            }
+        const erros = this.validar({
+            data:       {data: valores.data, dataCriacao: valores.data},
+            cliente:    {qtdDigitos: valores.cliente.length}
         })
+        
+        if(erros.length){
+            return new Promise((resolve, reject) => reject(erros))
+        } else {
+            return AtendimentoRepositorio.alterar(id, valores)
+                    .then(resultado => ({id, ...valores}))            
+        }
     }
 
-    excluir(id, res) {
-        const sql = `DELETE FROM atendimentos WHERE id=?`
-        conexao.query(sql, id, (erro, resultado) => {
-            if(erro){
-                res.status(400).json(erro)
-            } else {
-                res.status(200).json({id})
-            }
-        })
+    excluir(id) {
+        return AtendimentoRepositorio.excluir(id).then(resultado => ({id}))
     }
 }
 
