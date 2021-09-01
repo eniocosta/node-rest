@@ -1,6 +1,11 @@
 const query = require('../infra/database/queries')
 
-class AtendimentoRepository {
+class AtendimentoRepositorio {
+    listar() {
+        const sql = `SELECT * FROM atendimentos`
+        return query(sql)
+    }
+
     adicionar(atendimento) {
         const sql = `INSERT INTO atendimentos SET ?`
         return query(sql, atendimento)
@@ -8,4 +13,4 @@ class AtendimentoRepository {
     
 }
 
-module.exports = new AtendimentoRepository
+module.exports = new AtendimentoRepositorio
