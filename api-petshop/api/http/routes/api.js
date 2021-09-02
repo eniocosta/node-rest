@@ -4,7 +4,7 @@ const ModelFornecedor = require('../../models/Fornecedor')
 
 router.get('/fornecedores', async (req, res) => {
     const result = await ModelFornecedor.list()
-    res.send(JSON.stringify(result))
+    res.send(result)
 })
 
 router.get('/', (req, res) => {
