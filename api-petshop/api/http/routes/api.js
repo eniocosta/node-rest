@@ -1,10 +1,18 @@
 
 const router = require('express').Router()
-const ModelFornecedor = require('../../models/Fornecedor')
+const FornecedorRepository = require('../../repositories/Fornecedor')
+const FornecedorModel = require('../../models/Fornecedor')
 
 router.get('/fornecedores', async (req, res) => {
-    const result = await ModelFornecedor.list()
+    const result = await FornecedorRepository.list()
     res.send(result)
+})
+
+router.post('/fornecedores', async (req, res) => {
+    const data = req.body
+    const fornecedor = new FornecedorModel(data)
+    await fornecedor.create()
+    res.json(fornecedor)
 })
 
 router.get('/', (req, res) => {
