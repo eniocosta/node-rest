@@ -19,11 +19,15 @@ router.get('/fornecedores/:id', async (req, res) => {
     }
 })
 
-router.post('/fornecedores', async (req, res) => {
-    const data = req.body
-    const fornecedor = new FornecedorModel(data)
-    await fornecedor.create()
-    res.json(fornecedor)
+router.post('/fornecedores', async (req, res) => {    
+    try {
+        const data = req.body
+        const fornecedor = new FornecedorModel(data)
+        await fornecedor.create()
+        res.json(fornecedor)
+    } catch(error) {
+        res.status(400).send({message: error.message})
+    }
 })
 
 router.put('/fornecedores/:id', async (req, res) => {
