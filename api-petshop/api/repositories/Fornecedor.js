@@ -21,5 +21,11 @@ module.exports = {
 
     async update(id, data) {
         return instance.update(data, {where: {id}})
+    },
+
+    async delete(id) {
+        return instance.destroy({ where: { id }})
     }
+
+
 }

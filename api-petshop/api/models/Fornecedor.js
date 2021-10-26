@@ -59,6 +59,10 @@ class Fornecedor {
 
         await repository.update(this.id, data)
     }
+
+    async delete() {
+        return await repository.delete(this.id)        
+    }
 }
 
 module.exports = Fornecedor

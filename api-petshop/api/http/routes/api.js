@@ -44,4 +44,16 @@ router.get('/', (req, res) => {
     res.send('Hello World')
 })
 
+router.delete('/fornecedores/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        const fornecedor = new FornecedorModel({id})
+        await fornecedor.load()
+        await fornecedor.delete()
+        res.end()
+    } catch (error) {
+        res.status(400).send({message: error.message})
+    }
+})
+
 module.exports = router;
