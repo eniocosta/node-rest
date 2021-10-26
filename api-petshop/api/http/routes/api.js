@@ -24,7 +24,7 @@ router.post('/fornecedores', async (req, res) => {
         const data = req.body
         const fornecedor = new FornecedorModel(data)
         await fornecedor.create()
-        res.json(fornecedor)
+        res.status(201).json(fornecedor)
     } catch(error) {
         res.status(400).send({message: error.message})
     }
@@ -54,7 +54,7 @@ router.delete('/fornecedores/:id', async (req, res) => {
         const fornecedor = new FornecedorModel({id})
         await fornecedor.load()
         await fornecedor.delete()
-        res.end()
+        res.status(204).end()
     } catch (error) {
         res.status(400).send({message: error.message})
     }
