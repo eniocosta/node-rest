@@ -2,6 +2,7 @@
 const router = require('express').Router()
 const FornecedorRepository = require('../../repositories/Fornecedor')
 const FornecedorModel = require('../../models/Fornecedor')
+const NotFoundException = require('../exceptions/NotFound')
 
 router.get('/fornecedores', async (req, res) => {
     const result = await FornecedorRepository.list()
@@ -40,7 +41,12 @@ router.put('/fornecedores/:id', async (req, res) => {
         await fornecedor.update()
         res.send(fornecedor)
     } catch (error) {
-        res.status(400).send({message: error.message})
+        if (error instanceof NotFoundException){
+            res.status(404)
+        } else {
+            res.status(400)
+        }
+        res.send({message: error.message})
     }
 })
 

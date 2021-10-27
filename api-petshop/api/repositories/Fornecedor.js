@@ -1,4 +1,5 @@
 const instance = require('../instances/Fornecedor')
+const NotFoundException = require('../http/exceptions/NotFound')
 
 module.exports = {
     list() {
@@ -13,7 +14,7 @@ module.exports = {
         const result = await instance.findOne({where: {id}})
         
         if(!result) {
-            throw new Error('Fornecedor não encontrado')
+            throw new NotFoundException('Fornecedor não encontrado')
         }
 
         return result
