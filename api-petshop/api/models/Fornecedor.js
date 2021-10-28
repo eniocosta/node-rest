@@ -1,4 +1,6 @@
 const repository = require('../repositories/Fornecedor')
+const InvalidFieldException = require('../http/exceptions/InvalidField')
+
 class Fornecedor {
     constructor({
         id,
@@ -71,7 +73,7 @@ class Fornecedor {
         fields.forEach(field => {
             const value = this[field]
             if (typeof value !== 'string' || value.length == 0) {
-                throw new Error(`O campo ${field} está inválido!`)
+                throw new InvalidFieldException(field)
             }
         })
     }
