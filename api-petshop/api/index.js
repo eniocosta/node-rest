@@ -3,11 +3,14 @@ const app = express()
 const bodyParser = require('body-parser')
 const config = require('config')
 
+const checkContentType = require('./http/response/Serializer')
 const ExceptionFilter = require('./http/exceptions/ExceptionFilter')
 
 const router = require('./http/routes/api')
 
 app.use(bodyParser.json())
+
+app.use(checkContentType)
 
 app.use('/api', router)
 
