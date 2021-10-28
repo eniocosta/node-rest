@@ -3,7 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const config = require('config')
 
-const checkContentType = require('./http/response/Serializer')
+const checkContentType = require('./http/request/AcceptFilter')
 const ExceptionFilter = require('./http/exceptions/ExceptionFilter')
 
 const router = require('./http/routes/api')
